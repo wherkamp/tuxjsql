@@ -7,21 +7,18 @@
     <parent>
         <groupId>me.kingtux</groupId>
         <artifactId>tuxjsql</artifactId>
-        <version>1.2.4</version>
+        <version>2.0</version>
     </parent>
 
-    <artifactId>tuxjsql-sqlite</artifactId>
-    <version>1.2.4</version>
-
-
-    <name>TuxJSQL (SQLITE)</name>
+    <artifactId>tuxjsql-abstract</artifactId>
+    <version>2.0</version>
     <licenses>
         <license>
             <name>GNU General Public License v3.0</name>
         </license>
     </licenses>
     <url>https://github.com/wherkamp/tuxjsql</url>
-    <description>A JBDC wrapper, sql builder, and sql executor (SQLITE Implementation)</description>
+    <description>A JBDC wrapper, sql builder, and sql executor</description>
     <scm>
         <url>https://github.com/wherkamp/tuxjsql</url>
     </scm>
@@ -105,20 +102,29 @@
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+            </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
-            <groupId>me.kingtux</groupId>
-            <artifactId>tuxjsql-core</artifactId>
-            <version>1.2.4</version>
+            <groupId>com.github.clr1107</groupId>
+            <artifactId>Vessel</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>3.25.2</version>
-            <scope>compile</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -126,5 +132,18 @@
             <version>1.0.13</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.2.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.2.0-M1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+    
 </project>
