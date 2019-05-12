@@ -1,6 +1,6 @@
 package me.kingtux.tuxjsql.core;
 
-import pw.rayz.vessel.objects.Database;
+import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
@@ -10,7 +10,7 @@ import static me.kingtux.tuxjsql.core.InternalUtils.getImplementationClass;
 public interface TuxJSQLBuilder {
 
 
-    public static TuxJSQL build(Database db, SQLBuilder builder) {
+    public static TuxJSQL build(ConnectionProvider db, SQLBuilder builder) {
         return new TuxJSQL(db, builder);
     }
 

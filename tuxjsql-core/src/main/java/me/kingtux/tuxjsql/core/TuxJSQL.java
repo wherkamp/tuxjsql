@@ -1,9 +1,11 @@
 package me.kingtux.tuxjsql.core;
 
 
+import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pw.rayz.vessel.objects.Database;
+
+import java.sql.Connection;
 
 /**
  * TuxJSQL core class.
@@ -12,14 +14,16 @@ import pw.rayz.vessel.objects.Database;
  */
 public final class TuxJSQL {
     public static Logger LOGGER = LoggerFactory.getLogger(TuxJSQL.class);
-    private Database database;
+    private ConnectionProvider provider;
     private SQLBuilder builder;
 
 
-    public TuxJSQL(Database database, SQLBuilder builder) {
-        this.database = database;
+    public TuxJSQL(ConnectionProvider provider, SQLBuilder builder) {
+        this.provider = provider;
         this.builder = builder;
     }
 
-    public enum Implementation {}
+    public Connection getConnection(){
+        return provider.getConnection();
+    }
 }
