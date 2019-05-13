@@ -1,5 +1,6 @@
 package me.kingtux.tuxjsql.core;
 
+import me.kingtux.tuxjsql.core.builders.SQLBuilder;
 import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +32,7 @@ public interface TuxJSQLBuilder {
         try {
             return (TuxJSQLBuilder) iClazz.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            TuxJSQL.LOGGER.error("Unable to create TuxJSQLBuilder", e);
+            TuxJSQL.getLogger().error("Unable to create TuxJSQLBuilder", e);
         }
         return null;
     }

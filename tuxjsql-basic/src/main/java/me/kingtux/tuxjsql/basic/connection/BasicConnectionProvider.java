@@ -27,7 +27,7 @@ public class BasicConnectionProvider implements ConnectionProvider {
         try {
             ((BasicConnection) connection).getConnection().close();
         } catch (SQLException e) {
-            TuxJSQL.LOGGER.error("Unable to close connection", e);
+            TuxJSQL.getLogger().error("Unable to close connection", e);
         }
     }
 
@@ -40,7 +40,7 @@ public class BasicConnectionProvider implements ConnectionProvider {
         try {
             return !connection.isClosed();
         } catch (SQLException e) {
-            TuxJSQL.LOGGER.error("Unable to get isClosed status", e);
+            TuxJSQL.getLogger().error("Unable to get isClosed status", e);
         }
         return false;
     }
@@ -51,7 +51,7 @@ public class BasicConnectionProvider implements ConnectionProvider {
             Class.forName(connectionRules.getDriver());
             connection = DriverManager.getConnection(connectionRules.getUrl(), userRules);
         } catch (ClassNotFoundException | SQLException e) {
-            TuxJSQL.LOGGER.error("Unable to connect to db", e);
+            TuxJSQL.getLogger().error("Unable to connect to db", e);
         }
     }
 }

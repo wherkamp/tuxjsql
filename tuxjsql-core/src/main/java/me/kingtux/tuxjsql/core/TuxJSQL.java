@@ -1,6 +1,7 @@
 package me.kingtux.tuxjsql.core;
 
 
+import me.kingtux.tuxjsql.core.builders.SQLBuilder;
 import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
