@@ -14,7 +14,7 @@ public class InternalUtils {
         try {
             iClazz = Class.forName(s);
         } catch (ClassNotFoundException e) {
-            TuxJSQL.LOGGER.error(String.format("Unable to locate implementation class: %s", s), e);
+            TuxJSQL.getLogger().error(String.format("Unable to locate implementation class: %s", s), e);
         }
         return iClazz;
     }

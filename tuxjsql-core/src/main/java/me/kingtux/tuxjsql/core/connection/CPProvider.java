@@ -3,6 +3,7 @@ package me.kingtux.tuxjsql.core.connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class CPProvider {
     private static ServiceLoader<ConnectionProvider> loader = ServiceLoader
@@ -21,6 +22,7 @@ public class CPProvider {
     }
 
     public static ConnectionProvider getCP() {
+
         List<ConnectionProvider> providers = providers(true);
         if (providers.size() == 1) {
             return providers.get(0);
@@ -30,6 +32,7 @@ public class CPProvider {
                 return provider;
             }
         }
+
         return providers.get(0);
     }
 }

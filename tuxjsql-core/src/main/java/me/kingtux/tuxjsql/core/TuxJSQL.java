@@ -13,7 +13,7 @@ import java.sql.Connection;
  * @author KingTux
  */
 public final class TuxJSQL {
-    public static Logger LOGGER = LoggerFactory.getLogger(TuxJSQL.class);
+    private static Logger logger = LoggerFactory.getLogger(TuxJSQL.class);
     private ConnectionProvider provider;
     private SQLBuilder builder;
 
@@ -25,5 +25,14 @@ public final class TuxJSQL {
 
     public Connection getConnection(){
         return provider.getConnection();
+    }
+
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void setLogger(Logger logger) {
+        if (logger == null) return;
+        TuxJSQL.logger = logger;
     }
 }
