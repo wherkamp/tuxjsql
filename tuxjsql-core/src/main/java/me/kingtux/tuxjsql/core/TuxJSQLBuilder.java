@@ -12,7 +12,7 @@ public interface TuxJSQLBuilder {
 
 
     public static TuxJSQL build(ConnectionProvider db, SQLBuilder builder) {
-        return new TuxJSQL(db, builder);
+        return new TuxJSQL(db, builder, executor);
     }
 
     public static TuxJSQLBuilder create(Properties properties) {

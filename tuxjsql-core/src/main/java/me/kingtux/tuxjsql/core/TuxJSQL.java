@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
+import java.util.concurrent.ExecutorService;
 
 /**
  * TuxJSQL core class.
@@ -17,11 +18,12 @@ public final class TuxJSQL {
     private static Logger logger = LoggerFactory.getLogger(TuxJSQL.class);
     private ConnectionProvider provider;
     private SQLBuilder builder;
-
-
-    public TuxJSQL(ConnectionProvider provider, SQLBuilder builder) {
+    private ExecutorService executor;
+    public TuxJSQL(ConnectionProvider provider, SQLBuilder builder, ExecutorService executor) {
         this.provider = provider;
         this.builder = builder;
+        this.executor = executor;
+        Runtime.getRuntime().addShutdownHook(new Thread(provider::close));
     }
 
     public Connection getConnection(){
@@ -35,5 +37,9 @@ public final class TuxJSQL {
     public static void setLogger(Logger logger) {
         if (logger == null) return;
         TuxJSQL.logger = logger;
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
     }
 }

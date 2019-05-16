@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>tuxjsql-core</module>
-        <module>tuxjsql-basic</module>
 
     </modules>
     <name>TuxJSQL (Parent)</name>

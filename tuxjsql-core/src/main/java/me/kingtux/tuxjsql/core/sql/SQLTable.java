@@ -10,5 +10,10 @@ public interface SQLTable {
 
     SelectStatement select();
 
+    UpdateStatement update();
+
+    DeleteStatement delete();
+
+    InsertStatement insert();
 
 }
