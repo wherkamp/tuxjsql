@@ -9,7 +9,7 @@ public interface DBRow {
 
     String getAsString();
 
-    UUID getASUUID();
+    UUID getAsUUID();
 
     int getAsInt();
 

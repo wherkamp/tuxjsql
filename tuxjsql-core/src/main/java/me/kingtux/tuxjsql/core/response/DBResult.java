@@ -12,6 +12,6 @@ public interface DBResult extends Iterable<DBRow>{
 
     DBRow first();
 
-    DBRow numberOfRows();
+    int numberOfRows();
 
 }
