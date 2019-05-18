@@ -5,6 +5,9 @@ import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static me.kingtux.tuxjsql.core.InternalUtils.getImplementationClass;
 
@@ -12,6 +15,10 @@ public interface TuxJSQLBuilder {
 
 
     public static TuxJSQL build(ConnectionProvider db, SQLBuilder builder) {
+        return build(db, builder, Executors.newSingleThreadExecutor());
+    }
+
+    public static TuxJSQL build(ConnectionProvider db, SQLBuilder builder, ExecutorService executor) {
         return new TuxJSQL(db, builder, executor);
     }
 

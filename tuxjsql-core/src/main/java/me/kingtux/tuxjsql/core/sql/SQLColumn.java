@@ -12,6 +12,7 @@ public interface SQLColumn {
 
     SQLDataType getDataType();
 
+    List<String> dataTypeRules();
 
     /**
      * This takes all the rules. And makes a string for building the column

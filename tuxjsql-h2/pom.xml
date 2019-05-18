@@ -4,20 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.kingtux</groupId>
-    <artifactId>tuxjsql</artifactId>
-    <version>2.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>tuxjsql-core</module>
-        <module>tuxjsql-sqlite</module>
-        <module>tuxjsql-mysql</module>
-        <module>tuxjsql-h2</module>
-        <module>tuxjsql-hikaricp</module>
-        <module>tuxjsql-vessel</module>
+    <parent>
+        <groupId>me.kingtux</groupId>
+        <artifactId>tuxjsql</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
 
-    </modules>
-    <name>TuxJSQL (Parent)</name>
+    <artifactId>tuxjsql-h2</artifactId>
+    <version>2.0-SNAPSHOT</version>
+
+    <name>TuxJSQL (Core)</name>
     <licenses>
         <license>
             <name>GNU General Public License v3.0</name>
@@ -46,6 +42,7 @@
         </repository>
     </distributionManagement>
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -114,5 +111,31 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-surefire-provider</artifactId>
+            <version>1.2.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.2.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.kingtux</groupId>
+            <artifactId>tuxjsql-core</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
 
+    </dependencies>
 </project>

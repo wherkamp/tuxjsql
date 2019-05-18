@@ -26,8 +26,11 @@ public interface WhereStatement<T> {
 
     SubWhereStatement<WhereStatement> NOT();
 
-
-    T build();
+    /**
+     * This does a return to the previus object.
+     * @return previos object
+     */
+    T and();
 
 
     String getQuery();

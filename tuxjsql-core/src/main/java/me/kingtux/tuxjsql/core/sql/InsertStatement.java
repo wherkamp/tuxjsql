@@ -1,5 +1,6 @@
 package me.kingtux.tuxjsql.core.sql;
 
+import me.kingtux.tuxjsql.basic.sql.SimpleSQLTable;
 import me.kingtux.tuxjsql.core.response.DBAction;
 
 import java.util.Map;
@@ -11,4 +12,6 @@ public interface InsertStatement {
     InsertStatement value(String string, Object o);
 
     DBAction execute();
+
+    InsertStatement setTable(SimpleSQLTable simpleSQLTable);
 }

@@ -26,7 +26,7 @@ public interface SubWhereStatement<T> {
     SubWhereStatement<SubWhereStatement> NOT();
 
 
-    T build();
+    T and();
 
     String getQuery();
 
