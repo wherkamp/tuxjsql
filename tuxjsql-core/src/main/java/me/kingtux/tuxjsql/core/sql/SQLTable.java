@@ -21,4 +21,5 @@ public interface SQLTable {
 
     InsertStatement insert();
 
+    String getName();
 }

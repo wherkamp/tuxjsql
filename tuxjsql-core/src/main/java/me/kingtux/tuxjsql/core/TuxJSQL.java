@@ -1,11 +1,14 @@
 package me.kingtux.tuxjsql.core;
 
 
+import me.kingtux.tuxjsql.basic.BasicTableCollection;
+import me.kingtux.tuxjsql.basic.sql.BasicDataTypes;
 import me.kingtux.tuxjsql.core.builders.ColumnBuilder;
 import me.kingtux.tuxjsql.core.builders.SQLBuilder;
 import me.kingtux.tuxjsql.core.builders.TableBuilder;
 import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 import me.kingtux.tuxjsql.core.sql.SQLDataType;
+import me.kingtux.tuxjsql.core.sql.SQLTable;
 import me.kingtux.tuxjsql.core.sql.select.JoinStatement;
 import me.kingtux.tuxjsql.core.sql.select.SelectStatement;
 import me.kingtux.tuxjsql.core.sql.where.SubWhereStatement;
@@ -15,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Predicate;
 
 /**
  * TuxJSQL core class.
@@ -26,11 +30,16 @@ public final class TuxJSQL {
     private ConnectionProvider provider;
     private SQLBuilder builder;
     private ExecutorService executor;
+    private TableCollection tableCollection = new BasicTableCollection();
+
     public TuxJSQL(ConnectionProvider provider, SQLBuilder builder, ExecutorService executor) {
+        if (logger.isInfoEnabled())
+            getLogger().info(String.format("TuxJSQL is using %s For its Connections!", provider.name()));
         this.provider = provider;
         this.builder = builder;
         this.executor = executor;
         Runtime.getRuntime().addShutdownHook(new Thread(provider::close));
+
     }
 
     /**
@@ -49,6 +58,14 @@ public final class TuxJSQL {
     public static void setLogger(Logger logger) {
         if (logger == null) return;
         TuxJSQL.logger = logger;
+    }
+
+    public TableCollection getTableCollection() {
+        return tableCollection;
+    }
+
+    public void addTable(SQLTable table) {
+        tableCollection.add(table);
     }
 
     public TableBuilder createTable() {
@@ -83,7 +100,7 @@ public final class TuxJSQL {
         return builder.createJoinStatement();
     }
 
-    public SQLDataType convertDataType(SQLDataType dataType) {
+    public SQLDataType convertDataType(BasicDataTypes dataType) {
         return builder.convertDataType(dataType);
     }
 

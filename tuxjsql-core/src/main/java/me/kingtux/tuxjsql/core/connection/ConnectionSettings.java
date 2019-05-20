@@ -4,6 +4,11 @@ public class ConnectionSettings {
     private String driver;
     private String url;
 
+    public ConnectionSettings(String driver, String url) {
+        this.driver = driver;
+        this.url = url;
+    }
+
     public String getDriver() {
         return driver;
     }

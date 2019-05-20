@@ -1,15 +1,14 @@
 package me.kingtux.tuxjsql.core.builders;
 
-import me.kingtux.tuxjsql.core.sql.DeleteStatement;
-import me.kingtux.tuxjsql.core.sql.InsertStatement;
-import me.kingtux.tuxjsql.core.sql.SQLDataType;
-import me.kingtux.tuxjsql.core.sql.UpdateStatement;
+import me.kingtux.tuxjsql.basic.sql.BasicDataTypes;
+import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
+import me.kingtux.tuxjsql.core.sql.*;
 import me.kingtux.tuxjsql.core.sql.select.JoinStatement;
 import me.kingtux.tuxjsql.core.sql.select.SelectStatement;
 import me.kingtux.tuxjsql.core.sql.where.SubWhereStatement;
 import me.kingtux.tuxjsql.core.sql.where.WhereStatement;
 
-import javax.swing.table.JTableHeader;
+import java.util.Properties;
 
 public interface SQLBuilder {
     TableBuilder createTable();
@@ -31,14 +30,22 @@ public interface SQLBuilder {
     UpdateStatement createUpdateStatement();
     
     DeleteStatement createDeleteStatement();
-    
+
+
+    String name();
+
+    String key();
+
+    String jbdcClass();
     
     /**
-     * This will convert a public DataType to its local dielect version.
+     * This will convert a public DataType to its local dialect version.
      * @param dataType
      * @return
      */
-    SQLDataType convertDataType(SQLDataType dataType);
+    SQLDataType convertDataType(BasicDataTypes dataType);
 
     InsertStatement createInsertStatement();
+
+    void configureConnectionProvider(ConnectionProvider provider, Properties userProperties);
 }

@@ -28,7 +28,7 @@ public class CPProvider {
             return providers.get(0);
         }
         for (ConnectionProvider provider : providers) {
-            if (provider.getClass().getCanonicalName().startsWith("me.kingtux.tuxjsql.me.kingtux.tuxjsql.basic")) {
+            if (provider.getClass().getCanonicalName().startsWith("me.kingtux.tuxjsql.basic")) {
                 return provider;
             }
         }

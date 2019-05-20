@@ -46,6 +46,11 @@ public class BasicConnectionProvider implements ConnectionProvider {
     }
 
     @Override
+    public String name() {
+        return "Basic Connection";
+    }
+
+    @Override
     public void setup(ConnectionSettings connectionRules, Properties userRules) {
         try {
             Class.forName(connectionRules.getDriver());

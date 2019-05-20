@@ -45,6 +45,11 @@ public class HikariCPConnectionProvider implements ConnectionProvider {
     }
 
     @Override
+    public String name() {
+        return "TuxJSQL-HikariCP CP";
+    }
+
+    @Override
     public void setup(ConnectionSettings settings, Properties userSettings) {
         HikariConfig hikariConfig = new HikariConfig(userSettings);
         hikariConfig.setJdbcUrl(settings.getUrl());

@@ -13,6 +13,6 @@ public interface ConnectionProvider {
 
     boolean isConnected();
 
-
+    String name();
     void setup(ConnectionSettings settings, Properties userSettings);
 }
