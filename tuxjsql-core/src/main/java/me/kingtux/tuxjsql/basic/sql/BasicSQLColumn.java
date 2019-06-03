@@ -29,6 +29,10 @@ public abstract class BasicSQLColumn implements SQLColumn {
         this.type = type;
     }
 
+    protected String buildDataType() {
+        return null;
+    }
+
     @Override
     public String getName() {
         return name;
