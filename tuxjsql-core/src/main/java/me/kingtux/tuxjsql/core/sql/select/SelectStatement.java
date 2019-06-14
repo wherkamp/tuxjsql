@@ -1,6 +1,6 @@
 package me.kingtux.tuxjsql.core.sql.select;
 
-import me.kingtux.tuxjsql.basic.sql.SimpleSQLTable;
+import me.kingtux.tuxjsql.basic.sql.BasicSQLTable;
 import me.kingtux.tuxjsql.core.response.DBAction;
 import me.kingtux.tuxjsql.core.sql.where.WhereStatement;
 
@@ -26,5 +26,5 @@ public interface SelectStatement {
 
     DBAction execute();
 
-    SelectStatement setTable(SimpleSQLTable simpleSQLTable);
+    SelectStatement setTable(BasicSQLTable basicSQLTable);
 }

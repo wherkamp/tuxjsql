@@ -13,12 +13,12 @@ import me.kingtux.tuxjsql.core.sql.select.JoinStatement;
 import me.kingtux.tuxjsql.core.sql.select.SelectStatement;
 import me.kingtux.tuxjsql.core.sql.where.SubWhereStatement;
 import me.kingtux.tuxjsql.core.sql.where.WhereStatement;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Predicate;
 
 /**
  * TuxJSQL core class.
@@ -32,14 +32,27 @@ public final class TuxJSQL {
     private ExecutorService executor;
     private TableCollection tableCollection = new BasicTableCollection();
 
-    public TuxJSQL(ConnectionProvider provider, SQLBuilder builder, ExecutorService executor) {
+    TuxJSQL(ConnectionProvider provider, SQLBuilder builder, ExecutorService executor) {
         if (logger.isInfoEnabled())
             getLogger().info(String.format("TuxJSQL is using %s For its Connections!", provider.name()));
         this.provider = provider;
         this.builder = builder;
         this.executor = executor;
         Runtime.getRuntime().addShutdownHook(new Thread(provider::close));
+    }
 
+    /**
+     * Changes the executor.
+     * Warning this will end all current tasks.
+     *
+     * @param executor The new executor
+     */
+    public void setExecutor(ExecutorService executor) {
+        Validate.notNull(executor, "The executor Service cant be null.");
+        Validate.isTrue(executor.isShutdown(), "The executor must be usable");
+        TuxJSQL.logger.info("Shutting down executor and setting a new one");
+        this.executor.shutdownNow();
+        this.executor = executor;
     }
 
     /**

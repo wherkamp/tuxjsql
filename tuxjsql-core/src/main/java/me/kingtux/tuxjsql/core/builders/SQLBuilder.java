@@ -1,5 +1,6 @@
 package me.kingtux.tuxjsql.core.builders;
 
+import me.kingtux.tuxjsql.basic.builders.BasicTableBuilder;
 import me.kingtux.tuxjsql.basic.sql.BasicDataTypes;
 import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
 import me.kingtux.tuxjsql.core.sql.*;
@@ -36,8 +37,11 @@ public interface SQLBuilder {
 
     String key();
 
-    String jbdcClass();
-    
+    String jdbcClass();
+
+    SQLAction[] supportedActions();
+
+    boolean supportsAction(SQLAction actions);
     /**
      * This will convert a public DataType to its local dialect version.
      * @param dataType
@@ -48,4 +52,6 @@ public interface SQLBuilder {
     InsertStatement createInsertStatement();
 
     void configureConnectionProvider(ConnectionProvider provider, Properties userProperties);
+
+    <T> ColumnBuilder<T> createColumn(T t);
 }

@@ -1,6 +1,6 @@
 package me.kingtux.tuxjsql.core.sql;
 
-import me.kingtux.tuxjsql.basic.sql.SimpleSQLTable;
+import me.kingtux.tuxjsql.basic.sql.BasicSQLTable;
 import me.kingtux.tuxjsql.core.response.DBAction;
 import me.kingtux.tuxjsql.core.sql.where.WhereStatement;
 
@@ -10,5 +10,5 @@ public interface DeleteStatement {
 
     DBAction execute();
 
-    DeleteStatement setTable(SimpleSQLTable simpleSQLTable);
+    DeleteStatement setTable(BasicSQLTable basicSQLTable);
 }

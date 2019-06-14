@@ -20,10 +20,10 @@ public class TuxJSQLBuilder {
     }
 
     static {
-        loadedBuilders.addAll(InternalUtils.loadAllClasses());
         if (TuxJSQL.getLogger().isDebugEnabled()) {
             new Thread(() -> {
-                for (Class<?> clazz : loadedBuilders) {
+                for (Class<? extends SQLBuilder> clazz : InternalUtils.loadAllClasses()) {
+                    loadedBuilders.add(clazz);
                     SQLBuilder builder = getBuildByClazz(clazz);
                     TuxJSQL.getLogger().debug(String.format("Found SQLBuilder: %s", builder.name()));
                 }
@@ -75,7 +75,6 @@ public class TuxJSQLBuilder {
 
 
     public static TuxJSQL create(Properties properties, SQLBuilder builder, ExecutorService service) {
-
         ConnectionProvider provider = CPProvider.getCP();
         builder.configureConnectionProvider(provider, properties);
 

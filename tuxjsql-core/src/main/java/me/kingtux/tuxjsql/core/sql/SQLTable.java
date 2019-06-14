@@ -7,11 +7,7 @@ public interface SQLTable {
 
     void executeStatement(String string);
 
-    SQLTable createTable();
 
-    SQLTable createTableIfNotExists();
-
-    SQLTable createOrUpdate();
 
     SelectStatement select();
 
