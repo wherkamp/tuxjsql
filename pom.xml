@@ -6,13 +6,24 @@
 
     <groupId>me.kingtux</groupId>
     <artifactId>tuxjsql</artifactId>
-    <version>1.2.4</version>
+    <version>2.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>me.kingtux</groupId>
+            <artifactId>tuxjsql-core</artifactId>
+            <version>2.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <packaging>pom</packaging>
     <modules>
         <module>tuxjsql-core</module>
-        <module>tuxjsql-mysql</module>
         <module>tuxjsql-sqlite</module>
+        <module>tuxjsql-mysql</module>
         <module>tuxjsql-h2</module>
+        <module>tuxjsql-hikaricp</module>
+        <module>tuxjsql-vessel</module>
+
     </modules>
     <name>TuxJSQL (Parent)</name>
     <licenses>
@@ -103,6 +114,11 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
             </plugin>
         </plugins>
     </build>

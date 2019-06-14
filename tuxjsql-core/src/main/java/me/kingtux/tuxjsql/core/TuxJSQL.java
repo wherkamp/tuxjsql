@@ -1,192 +1,131 @@
 package me.kingtux.tuxjsql.core;
 
+
+import me.kingtux.tuxjsql.basic.BasicTableCollection;
+import me.kingtux.tuxjsql.basic.sql.BasicDataTypes;
+import me.kingtux.tuxjsql.core.builders.ColumnBuilder;
 import me.kingtux.tuxjsql.core.builders.SQLBuilder;
-import me.kingtux.tuxjsql.core.result.ColumnItem;
-import me.kingtux.tuxjsql.core.result.DBRow;
+import me.kingtux.tuxjsql.core.builders.TableBuilder;
+import me.kingtux.tuxjsql.core.connection.ConnectionProvider;
+import me.kingtux.tuxjsql.core.sql.SQLDataType;
+import me.kingtux.tuxjsql.core.sql.SQLTable;
+import me.kingtux.tuxjsql.core.sql.select.JoinStatement;
+import me.kingtux.tuxjsql.core.sql.select.SelectStatement;
+import me.kingtux.tuxjsql.core.sql.where.SubWhereStatement;
+import me.kingtux.tuxjsql.core.sql.where.WhereStatement;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 /**
  * TuxJSQL core class.
  *
  * @author KingTux
  */
-public class TuxJSQL {
-    private static me.kingtux.tuxjsql.core.builders.SQLBuilder SQLBuilder;
-    public  static Logger logger = LoggerFactory.getLogger(TuxJSQL.class);
-    private static List<Table> savedTables = new ArrayList<>();
+public final class TuxJSQL {
+    private static Logger logger = LoggerFactory.getLogger(TuxJSQL.class);
+    private ConnectionProvider provider;
+    private SQLBuilder builder;
+    private ExecutorService executor;
+    private TableCollection tableCollection = new BasicTableCollection();
 
-    private TuxJSQL() {
+    TuxJSQL(ConnectionProvider provider, SQLBuilder builder, ExecutorService executor) {
+        if (logger.isInfoEnabled())
+            getLogger().info(String.format("TuxJSQL is using %s For its Connections!", provider.name()));
+        this.provider = provider;
+        this.builder = builder;
+        this.executor = executor;
+        Runtime.getRuntime().addShutdownHook(new Thread(provider::close));
     }
 
     /**
-     * Save the table to grab later!
+     * Changes the executor.
+     * Warning this will end all current tasks.
      *
-     * @param table the table
+     * @param executor The new executor
      */
-    public static void saveTable(Table table) {
-        savedTables.add(table);
+    public void setExecutor(ExecutorService executor) {
+        Validate.notNull(executor, "The executor Service cant be null.");
+        Validate.isTrue(executor.isShutdown(), "The executor must be usable");
+        TuxJSQL.logger.info("Shutting down executor and setting a new one");
+        this.executor.shutdownNow();
+        this.executor = executor;
     }
 
     /**
-     * Get a saved table by name
+     * <b>REMEMBER to do Connection#close() to return it!</b>
      *
-     * @param name the name
-     * @return the saved table!
+     * @return a connection!
      */
-    public static Table getTableByName(String name) {
-        for (Table table : savedTables) {
-            if(table.getName().equalsIgnoreCase(name)){
-                return table;
-            }
-        }
-        return null;
+    public Connection getConnection(){
+        return provider.getConnection();
     }
 
-    /**
-     * Gets the static SQLBuilder
-     *
-     * @return the SQLBuilder
-     */
-    public static SQLBuilder getSQLBuilder() {
-        if (SQLBuilder == null) {
-            try {
-                throw new IllegalAccessException("TuxJSQL has not been configured... Please set the SQLBuilder");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-        return SQLBuilder;
+    public static Logger getLogger() {
+        return logger;
     }
 
-    /**
-     * Set the static access TuxJSQL
-     *
-     *
-     * @param SQLBuilder the SQLBuilder
-     */
-    public static void setSQLBuilder(SQLBuilder SQLBuilder) {
-        TuxJSQL.SQLBuilder = SQLBuilder;
+    public static void setLogger(Logger logger) {
+        if (logger == null) return;
+        TuxJSQL.logger = logger;
     }
 
-
-    /**
-     * Get the connection
-     * <b>Warning: for this to work the SQLBuilder must be set in TuxJSQL</b>
-     * @return the connection
-     */
-    public static Connection getConnection() {
-        try {
-            return getSQLBuilder().getDataSource().getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public TableCollection getTableCollection() {
+        return tableCollection;
     }
-    /**
-     * Creates a SQLBuilder from the properties provided
-     * <a href="https://github.com/wherkamp/tuxjsql/wiki/Creating-your-first-TuxJSQL-SQLBuilder">Learn more here</a>
-     *
-     * @param properties Properties in the correct format
-     * @return the SQLBuilder null if not found.
-     */
-    public static SQLBuilder setup(Properties properties) {
-        Type type = Type.valueOf(properties.getProperty("db.type").toUpperCase());
-        SQLBuilder builder;
-        if (type == Type.OTHER) {
-            try {
-                builder = (me.kingtux.tuxjsql.core.builders.SQLBuilder) Class.forName(properties.getProperty("db.class")).getConstructor().newInstance();
-            } catch (InstantiationException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-                logger.error("Unable to find " + properties.getProperty("db.class"), e);
-                return null;
-            }
-        } else {
-            builder = type.create();
-        }
-        if (Boolean.parseBoolean(properties.getProperty("db.auto.connect", "true"))) {
-            builder.createConnection(properties);
-        }
+
+    public void addTable(SQLTable table) {
+        tableCollection.add(table);
+    }
+
+    public TableBuilder createTable() {
+        return builder.createTable();
+    }
+
+    public ColumnBuilder createColumn() {
+        return builder.createColumn();
+    }
+
+    public WhereStatement createWhere() {
+        return builder.createWhere();
+    }
+
+    public SubWhereStatement createSubWhereStatement() {
+        return builder.createSubWhereStatement();
+    }
+
+    public <T> WhereStatement<T> createWhere(T t) {
+        return builder.createWhere(t);
+    }
+
+    public <T> SubWhereStatement<T> createSubWhereStatement(T t) {
+        return builder.createSubWhereStatement(t);
+    }
+
+    public SelectStatement createSelectStatement() {
+        return builder.createSelectStatement();
+    }
+
+    public JoinStatement createJoinStatement() {
+        return builder.createJoinStatement();
+    }
+
+    public SQLDataType convertDataType(BasicDataTypes dataType) {
+        return builder.convertDataType(dataType);
+    }
+
+    public ConnectionProvider getProvider() {
+        return provider;
+    }
+
+    public SQLBuilder getBuilder() {
         return builder;
     }
-    /**
-     * The Database Type
-     */
-    public enum Type {
-        /**
-         * MYSQL
-         */
-        MYSQL("me.kingtux.tuxjsql.mysql.MySQLBuilder", "tuxjsql-mysql"),
-        /**
-         * SQLITE
-         */
-        SQLITE("me.kingtux.tuxjsql.sqlite.SQLITEBuilder", "tuxjsql-sqlite"),
-        /**
-         * h2 database
-         *
-         */
-        H2("me.kingtux.tuxjsql.h2.H2Builder", "tuxjsql-h2"),
-        /**
-         * Other. If this is set please set the properties value
-         * db.class to your builders class.
-         */
-        OTHER("", "");
-        private String classPath, dependency;
-        Type(String classPath) {
-            this.classPath = classPath;
-        }
 
-        Type(String classPath, String dependency) {
-            this.classPath = classPath;
-            this.dependency = dependency;
-        }
-
-        public String getClassPath() {
-            return classPath;
-        }
-
-        public SQLBuilder create() {
-            Class<?> clazz = null;
-            try {
-                clazz = Class.forName(classPath);
-            } catch (ClassNotFoundException e) {
-                logger.error("Please add " + dependency + " To your maven or gradle. Use the same groupId as TuxJSQL-core");
-            }
-
-            try {
-                return (SQLBuilder) clazz.getConstructor().newInstance();
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-    public static class Utils {
-
-        public static List<DBRow> resultSetToResultRow(ResultSet resultSet, int numberOfColumns) {
-            List<DBRow> results = new ArrayList<>();
-            try {
-                int i = numberOfColumns;
-                logger.debug("Number of rows! " + i);
-                while (resultSet.next()) {
-                    List<ColumnItem> items = new ArrayList<>();
-                    for (int j = 1; j <= i; j++) {
-                        items.add(new ColumnItem(resultSet.getObject(j), resultSet.getMetaData().getColumnName(j)));
-                    }
-                    results.add(new DBRow(items));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return results;
-        }
+    public ExecutorService getExecutor() {
+        return executor;
     }
 }

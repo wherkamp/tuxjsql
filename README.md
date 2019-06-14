@@ -1,6 +1,6 @@
 # tuxjsql
 
-
+# This is 2.0 It doesn't work.
 TuxJSQL is a JBDC wrapper, sql builder, and sql executor. 
 This allows you to execute things to databases without even knowing SQL. 
 This even prevents issues between dialects.
@@ -11,6 +11,6 @@ This even prevents issues between dialects.
 
 [Javadocs](https://docs.kingtux.me/tuxjsql/)
 
-
+Note: To add a custom SQLBuilder you must start all packages with `me.kingtux.tuxjsql` This increases speed
 ### Do you love this project?
 Consider Donating https://paypal.me/wherkamp

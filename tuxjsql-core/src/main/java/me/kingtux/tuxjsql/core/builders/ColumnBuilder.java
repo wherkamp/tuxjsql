@@ -1,56 +1,39 @@
 package me.kingtux.tuxjsql.core.builders;
 
-import me.kingtux.tuxjsql.core.Column;
-import me.kingtux.tuxjsql.core.ColumnType;
-import me.kingtux.tuxjsql.core.DataType;
-import me.kingtux.tuxjsql.core.TuxJSQL;
-
-import java.util.Arrays;
-import java.util.List;
+import me.kingtux.tuxjsql.core.sql.SQLColumn;
+import me.kingtux.tuxjsql.core.sql.SQLDataType;
+import me.kingtux.tuxjsql.core.sql.SQLTable;
 
 /**
- * The Column SQLBuilder
+ * This is a layout for the ColumnBuilder.
+ *
+ * @param <T> the and() type
  */
-public interface ColumnBuilder {
+public interface ColumnBuilder<T> {
+
+    ColumnBuilder<T> setDataType(SQLDataType type);
+
+    ColumnBuilder<T> addDataTypeRule(String s);
+
+    ColumnBuilder<T> primaryKey();
+
+    ColumnBuilder<T> defaultValue(Object defaultValue);
+
+    ColumnBuilder<T> notNull();
+
+    ColumnBuilder<T> autoIncrement();
+
+
+
     /**
-     * The NOT NULL Status
-     * @param notNull is it not null
-     * @return is it not null
+     * If you want this column to reference another column
+     *
+     * @param otherColumn the other column
+     * @return The ColumnBuilder
      */
-    ColumnBuilder notNull(boolean notNull);
+    ColumnBuilder<T> foreignColumn(SQLColumn otherColumn);
 
-    default ColumnBuilder notNull() {
-        return notNull(true);
-    }
+    SQLColumn build();
 
-    ColumnBuilder name(String s);
-
-    ColumnBuilder autoIncrement(boolean autoIncrement);
-
-    ColumnBuilder primary(boolean primary);
-
-    ColumnBuilder unique(boolean unique);
-
-    ColumnBuilder defaultValue(Object value);
-
-    ColumnBuilder type(ColumnType value);
-
-    default ColumnBuilder type(DataType value, List<String> rules) {
-        return type(new ColumnType(value, rules));
-    }
-
-    default ColumnBuilder type(DataType value, String... rules) {
-        return type(new ColumnType(value, Arrays.asList(rules)));
-    }
-
-    default ColumnBuilder type(DataType value) {
-        return type(new ColumnType(value));
-    }
-
-
-    Column build();
-
-    static ColumnBuilder create() {
-        return TuxJSQL.getSQLBuilder().createColumn();
-    }
+    T and();
 }
